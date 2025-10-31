@@ -1,0 +1,689 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.1">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="zh-TW"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;建築經營協會慈善賭王Black Jack 大賽&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- 載入 Tailwind CSS --&gt;&lt;script src="https://cdn.tailwindcss.com"&gt;&lt;/script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- 載入 Noto Sans 字體 (用於中文和英文) --&gt;&lt;link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;family=Noto+Sans+TC:wght@400;700&amp;display=swap" rel="stylesheet"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>:root {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--primary-color: #f59e0b; /* Amber 500 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--secondary-color: #dc2626; /* Red 600 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--gold-start: #ffeb3b; /* Light Gold */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--gold-end: #f59e0b; <span class="Apple-converted-space">  </span>/* Darker Gold (Amber) */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>--card-back-red: #ff8888; /* Light Red for card back */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Noto Sans TC', 'Inter', sans-serif;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: #1a202c; /* Dark background */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 設置背景圖片 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-image: url('https://i.imgur.com/ZzKd8Lt.jpeg');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-size: cover;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-position: center;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-attachment: fixed;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#gameCanvas {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.25);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>border: 4px solid var(--primary-color);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: rgba(30, 64, 46, 0.9); /* Dark Green Table */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* --- 按鈕樣式升級：保留互動效果，移除背景以便圖片顯示 --- */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.control-btn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 保持響應式 Padding，但讓圖片填滿 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>@apply px-1 py-1 rounded-xl font-bold transition duration-300 ease-in-out shadow-lg transform hover:scale-105 border-0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 自訂陰影 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 將背景設為透明或白色，讓圖片顯示 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background-color: transparent !important;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: transparent !important; /* 隱藏 fallback 文字 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: 0; /* 移除行高，讓圖片更好地居中 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 統計重置按鈕仍使用原始的金色漸層 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>#resetStatsBtn {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(180deg, var(--gold-start) 0%, var(--gold-end) 100%) !important;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>color: #1a202c !important;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>line-height: normal; /* 恢復行高 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>@apply px-3 py-1 text-xs md:text-sm;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>/* 按鈕內的圖片樣式 */</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.button-img {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>/* 確保圖片填滿按鈕且不變形 */</p>
+<p class="p1"><span class="Apple-converted-space">            </span>@apply w-full h-full object-contain p-0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body class="p-1 md:p-6 flex flex-col items-center"&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- 標題與 Logo 區塊: 移除 max-w-lg 限制，使用 w-full --&gt;&lt;div class="w-full mx-auto mb-3 p-3 rounded-xl bg-gray-900/80 shadow-2xl flex items-center space-x-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;img id="logoImg" src="https://i.imgur.com/sDO3tAh.png" alt="Logo" class="w-16 h-auto"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="text-left"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1 class="text-lg md:text-xl font-black text-white leading-snug"&gt;建築經營協會慈善賭王&lt;br&gt;Black Jack 大賽&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- 遊戲統計區: 移除 max-w-lg 限制，使用 w-full --&gt;&lt;div class="w-full mx-auto mb-3 p-3 bg-gray-800/90 rounded-xl shadow-xl flex justify-around text-white text-sm md:text-base"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="font-bold text-gray-400"&gt;勝場 (Wins)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="statWins" class="text-green-400 text-xl font-mono"&gt;0&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="font-bold text-gray-400"&gt;敗場 (Losses)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="statLosses" class="text-red-400 text-xl font-mono"&gt;0&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="text-center"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="font-bold text-gray-400"&gt;勝率 (Rate)&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div id="statRate" class="text-yellow-400 text-xl font-mono"&gt;0.00%&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="resetStatsBtn" class="control-btn bg-blue-500 text-white px-3 py-1 self-center text-xs md:text-sm"&gt;重置統計&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- Canvas 遊戲區: 移除 max-w-lg 限制，並將長寬比調整為 5/4 (更接近正方形，適合手機) --&gt;&lt;div class="w-full aspect-[5/4] mx-auto relative rounded-xl overflow-hidden"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;canvas id="gameCanvas" class="w-full h-full"&gt;&lt;/canvas&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;!-- 遊戲控制按鈕區: 移除 max-w-lg 限制，使用 w-full --&gt;&lt;div id="controls" class="w-full mx-auto mt-3 mb-3 flex justify-center space-x-4"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- 初始按鈕將在 JS 中設定為圖片 --&gt;&lt;button id="hitBtn" class="control-btn w-1/3"&gt;要牌 (Hit)&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button id="standBtn" class="control-btn w-1/3"&gt;停牌 (Stand)&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 全局變量</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const canvas = document.getElementById('gameCanvas');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const ctx = canvas.getContext('2d');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const statWins = document.getElementById('statWins');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const statLosses = document.getElementById('statLosses');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const statRate = document.getElementById('statRate');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const controlsDiv = document.getElementById('controls');</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 遊戲狀態</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let deck = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let playerHand = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let dealerHand = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let gameActive = false;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let gameStatus = 'initial'; // 'initial', 'playerTurn', 'dealerTurn', 'end'</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 統計數據</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let stats = { wins: 0, losses: 0 };</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 卡牌圖片 URLs (使用 placeholder 作為通用卡片和背面)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const customCardImages = {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>J: 'https://i.imgur.com/v16ILID.png',</p>
+<p class="p1"><span class="Apple-converted-space">            </span>Q: 'https://i.imgur.com/5d46u7D.png',</p>
+<p class="p1"><span class="Apple-converted-space">            </span>K: 'https://i.imgur.com/MolqeHf.png',</p>
+<p class="p1"><span class="Apple-converted-space">            </span>BACK: 'https://placehold.co/100x150/606060/FFFFFF?text=Card+Back', // 灰色卡背</p>
+<p class="p1"><span class="Apple-converted-space">            </span>WELCOME: 'https://i.imgur.com/Y9znMk1.png', // 歡迎圖片</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 新增的按鈕圖片</p>
+<p class="p1"><span class="Apple-converted-space">            </span>HIT_BTN: 'https://i.imgur.com/wBUAsyk.png',<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>STAND_BTN: 'https://i.imgur.com/778ZjRH.png',<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>NEW_BTN: 'https://i.imgur.com/yudolIL.png'<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 圖片資源載入</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const images = {};</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const cardValues = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const cardSuits = ['♥', '♦', '♠', '♣'];</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// totalImages 現在包含 J, Q, K, WELCOME, HIT_BTN, STAND_BTN, NEW_BTN (共 7 張)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>let imagesLoaded = 0;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>const totalImages = 7;<span class="Apple-converted-space"> </span></p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 1. 圖片載入函數 ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadImages() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 載入所有圖片，包括撲克牌圖片和按鈕圖片</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const keys = ['J', 'Q', 'K', 'WELCOME', 'HIT_BTN', 'STAND_BTN', 'NEW_BTN'];<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>keys.forEach(key =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>images[key] = new Image();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>images[key].onload = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>imagesLoaded++;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (imagesLoaded === totalImages) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>console.log('所有圖片載入完成。');</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>loadStats();</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>resizeCanvas();</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>drawGame();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>};</p>
+<p class="p1"><span class="Apple-converted-space">                </span>images[key].onerror = () =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>console.error(`圖片載入失敗: ${key} (${customCardImages[key]})`);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>images[key] = null; // 失敗時設定為 null，以便回退</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>imagesLoaded++;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (imagesLoaded === totalImages) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>loadStats();</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>resizeCanvas();</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>drawGame();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>};</p>
+<p class="p1"><span class="Apple-converted-space">                </span>images[key].src = customCardImages[key];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 2. 統計數據 (localStorage) 管理 ---</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function loadStats() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const storedStats = localStorage.getItem('blackjackStats');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (storedStats) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>stats = JSON.parse(storedStats);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (e) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error("無法從 localStorage 讀取統計數據", e);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>stats = { wins: 0, losses: 0 };</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateStatsDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function saveStats() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>try {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>localStorage.setItem('blackjackStats', JSON.stringify(stats));</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} catch (e) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>console.error("無法儲存統計數據到 localStorage", e);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>updateStatsDisplay();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function updateStatsDisplay() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>statWins.textContent = stats.wins;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>statLosses.textContent = stats.losses;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const totalGames = stats.wins + stats.losses;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const rate = totalGames &gt; 0 ? (stats.wins / totalGames) * 100 : 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>statRate.textContent = `${rate.toFixed(2)}%`;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function resetStats() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>stats = { wins: 0, losses: 0 };</p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveStats();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 如果遊戲在結束狀態，重新繪製以更新統計數字</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (gameStatus === 'end' || gameStatus === 'initial') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>drawGame();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 3. 核心遊戲邏輯 (不變) ---</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 產生一副新牌組並洗牌 (Fisher-Yates 演算法)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function createAndShuffleDeck() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>deck = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let suit of cardSuits) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for (let value of cardValues) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>deck.push({ value, suit });</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 洗牌</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let i = deck.length - 1; i &gt; 0; i--) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const j = Math.floor(Math.random() * (i + 1));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>[deck[i], deck[j]] = [deck[j], deck[i]];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return deck;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function dealCard(hand) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (deck.length &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>hand.push(deck.pop());</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* 計算手牌總分 (自動處理 A 點數 1/11)</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function calculateScore(hand, isDealerHidden = false) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let score = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let aceCount = 0;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cardsToCount = isDealerHidden ? hand.slice(1) : hand;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (let card of cardsToCount) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (card.value === 'A') {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>aceCount++;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>score += 11;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else if (['K', 'Q', 'J'].includes(card.value)) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>score += 10;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>score += parseInt(card.value);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 調整 A 的點數 (11 -&gt; 1) 直到總分不高於 21</p>
+<p class="p1"><span class="Apple-converted-space">            </span>while (score &gt; 21 &amp;&amp; aceCount &gt; 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>score -= 10; // 11 變成 1</p>
+<p class="p1"><span class="Apple-converted-space">                </span>aceCount--;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>return score;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 4. 遊戲流程控制 ---</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* 輔助函數: 生成帶圖片的按鈕 HTML 內容</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function getButtonHtml(key, fallbackText) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const img = images[key];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (img &amp;&amp; img.complete) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 使用圖片作為按鈕內容</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return `&lt;img src="${img.src}" alt="${fallbackText}" class="button-img"&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 圖片未載入或失敗時，回退到文字</p>
+<p class="p1"><span class="Apple-converted-space">            </span>return fallbackText;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function startGame() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (gameActive) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>deck = createAndShuffleDeck();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>playerHand = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>dealerHand = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameStatus = 'playerTurn';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameActive = true;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 使用圖片按鈕 (保留 control-btn class 的互動效果)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>controlsDiv.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="hitBtn" class="control-btn w-1/3"&gt;${getButtonHtml('HIT_BTN', '要牌 (Hit)')}&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;button id="standBtn" class="control-btn w-1/3"&gt;${getButtonHtml('STAND_BTN', '停牌 (Stand)')}&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('hitBtn').onclick = hit;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('standBtn').onclick = stand;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 發初始兩張牌</p>
+<p class="p1"><span class="Apple-converted-space">            </span>dealCard(playerHand);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>dealCard(dealerHand);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>dealCard(playerHand);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>dealCard(dealerHand);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>drawGame();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>checkBlackjack();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function hit() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (gameStatus !== 'playerTurn') return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>dealCard(playerHand);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>drawGame();</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const score = calculateScore(playerHand);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (score &gt; 21) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>endGame('bust');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (score === 21) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 玩家拿到 21 點，自動停牌，換莊家回合</p>
+<p class="p1"><span class="Apple-converted-space">                </span>stand();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function stand() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (gameStatus !== 'playerTurn') return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameStatus = 'dealerTurn';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 立即顯示莊家底牌</p>
+<p class="p1"><span class="Apple-converted-space">            </span>drawGame();<span class="Apple-converted-space"> </span></p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 莊家回合延遲處理</p>
+<p class="p1"><span class="Apple-converted-space">            </span>setTimeout(dealerPlay, 1000);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function dealerPlay() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let dealerScore = calculateScore(dealerHand);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 莊家規則: 16 點或以下必須要牌；17 點或以上必須停牌</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (dealerScore &lt; 17) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>dealCard(dealerHand);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>drawGame();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>dealerScore = calculateScore(dealerHand);</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (dealerScore &gt; 21) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>endGame('dealerBust');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 繼續下一次檢查</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>setTimeout(dealerPlay, 1000);<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 莊家停牌 (&gt;= 17)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>endGame('finalCheck');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function checkBlackjack() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const pScore = calculateScore(playerHand);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dScore = calculateScore(dealerHand);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (pScore === 21 &amp;&amp; dScore === 21) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>endGame('push');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (pScore === 21) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>endGame('playerBlackjack');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (dScore === 21) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>endGame('dealerBlackjack');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function endGame(reason) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameActive = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>gameStatus = 'end';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>let message = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>let win = false;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const pScore = calculateScore(playerHand);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dScore = calculateScore(dealerHand);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>switch (reason) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'bust': // 玩家爆牌</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>message = `💥 玩家爆牌! (${pScore}) 莊家獲勝!`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>stats.losses++;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'dealerBust': // 莊家爆牌</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>message = `莊家爆牌! (${dScore}) 🎉 玩家獲勝!`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>stats.wins++;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>win = true;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'playerBlackjack': // 玩家 Blackjack</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>message = `♠️♥️ 玩家 Blackjack! 玩家獲勝!`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>stats.wins++;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>win = true;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'dealerBlackjack': // 莊家 Blackjack</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>message = `♦️♣️ 莊家 Blackjack! 莊家獲勝!`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>stats.losses++;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'push': // 平手 (Blackjack 或點數相同)</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>message = `🤝 平手 (Push)! 不計勝敗。`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>case 'finalCheck': // 莊家停牌，進行最終點數比較</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (pScore &gt; dScore) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>message = `玩家 ${pScore} 點 &gt; 莊家 ${dScore} 點! 🎉 玩家獲勝!`;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>stats.wins++;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>win = true;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>} else if (dScore &gt; pScore) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>message = `莊家 ${dScore} 點 &gt; 玩家 ${pScore} 點! 莊家獲勝!`;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>stats.losses++;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>message = `🤝 平手 (Push)! ${pScore} 點。不計勝敗。`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>break;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>default:</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>message = '遊戲結束。';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>saveStats();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>drawGame(message); // 帶上最終訊息繪製一次</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 動態顯示「再來一局」圖片按鈕 (取代控制區)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 寬度統一為 w-1/3</p>
+<p class="p1"><span class="Apple-converted-space">            </span>controlsDiv.innerHTML = `&lt;button id="newGameBtn" class="control-btn w-1/3"&gt;${getButtonHtml('NEW_BTN', '再來一局 (New Game)')}&lt;/button&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('newGameBtn').onclick = startGame;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 5. Canvas 繪圖與 RWD (不變) ---</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 卡片大小 (相對於 Canvas 寬度)<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const CARD_WIDTH_RATIO = 0.20;<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>const CARD_HEIGHT_RATIO = 0.33;<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function resizeCanvas() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const container = canvas.parentElement;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 設置 canvas 的內部解析度，使其與顯示尺寸匹配，避免模糊</p>
+<p class="p1"><span class="Apple-converted-space">            </span>canvas.width = container.clientWidth;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>canvas.height = container.clientHeight;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>drawGame();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* 繪製圓角矩形 (用於卡片背景)</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function roundRect(x, y, w, h, radius) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const r = radius || 5;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.moveTo(x + r, y);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineTo(x + w - r, y);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.arcTo(x + w, y, x + w, y + r, r);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineTo(x + w, y + h - r);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.arcTo(x + w, y + h, x + w - r, y + h, r);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineTo(x + r, y + h);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.arcTo(x, y + h, x, y + h - r, r);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineTo(x, y + r);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.arcTo(x, y, x + r, y, r);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.closePath();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* 繪製單張卡片 (包含新的卡背設計)</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function drawCard(card, x, y, w, h, isHidden) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const radius = w * 0.1;</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 繪製卡片邊緣</p>
+<p class="p1"><span class="Apple-converted-space">            </span>roundRect(x, y, w, h, radius);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.strokeStyle = '#222';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.lineWidth = 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.stroke();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (isHidden) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// *** 繪製卡背 (淺紅色底配上白色菱格條紋) ***</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--card-back-red') || '#ff8888';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fill();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.strokeStyle = 'white';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.lineWidth = w * 0.05;</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.save();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.clip(); // 限制繪圖區域在圓角矩形內</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const gridSize = w * 0.25; // 菱格大小</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 變換原點並旋轉 45 度</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.translate(x + w / 2, y + h / 2);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.rotate(Math.PI / 4);<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.translate(-(x + w / 2), -(y + h / 2));</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 繪製線條 (覆蓋整個區域)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>for (let i = x - w; i &lt; x + 2 * w; i += gridSize) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 垂直線 (旋轉後變斜線)</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.moveTo(i, y - w);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.lineTo(i, y + h + w);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.stroke();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 水平線 (旋轉後變斜線)</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.beginPath();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.moveTo(x - w, i);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.lineTo(x + h + w, i);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.stroke();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.restore(); // 恢復剪裁區和變換</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 繪製卡片正面</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fillStyle = 'white';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fill();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>const isRed = (card.suit === '♥' || card.suit === '♦');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fillStyle = isRed ? '#dc2626' : '#111827';</p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 嘗試繪製自訂圖片 (J, Q, K)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (images[card.value]) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 繪製圖片</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.drawImage(images[card.value], x, y, w, h);</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 繪製左上角小字和花色</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.font = `${w * 0.18}px 'Noto Sans TC', sans-serif`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.textAlign = 'left';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fillText(card.value, x + w * 0.05, y + h * 0.15);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fillText(card.suit, x + w * 0.05, y + h * 0.30);</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// *** 繪製普通卡片 (左上角花色，中間數字) ***</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 左上角花色</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.font = `${w * 0.25}px 'Noto Sans TC', sans-serif`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.textAlign = 'left';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fillText(card.suit, x + w * 0.08, y + h * 0.20);<span class="Apple-converted-space"> </span></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 中間數字</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.font = `${w * 0.6}px 'Noto Sans TC', sans-serif`; // 字體加大</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 根據字體大小調整垂直位置</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fillText(card.value, x + w / 2, y + h / 2 + (w * 0.6) / 3 * 0.8);</p>
+<p class="p2"><span class="Apple-converted-space">                    </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 右下角花色</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.textAlign = 'right';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.font = `${w * 0.25}px 'Noto Sans TC', sans-serif`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fillText(card.suit, x + w * 0.92, y + h * 0.85);<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>/**</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* 主繪圖函數</p>
+<p class="p1"><span class="Apple-converted-space">         </span>* @param {string} finalMessage - 遊戲結束時顯示的訊息</p>
+<p class="p1"><span class="Apple-converted-space">         </span>*/</p>
+<p class="p1"><span class="Apple-converted-space">        </span>function drawGame(finalMessage = null) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cw = canvas.width;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const ch = canvas.height;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cardW = cw * CARD_WIDTH_RATIO;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const cardH = ch * CARD_HEIGHT_RATIO;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const padding = cw * 0.02;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 1. 清除畫布</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.clearRect(0, 0, cw, ch);</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 2. 繪製標題/分數區 (調整位置以騰出卡牌空間)</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.font = `${cw * 0.045}px 'Noto Sans TC', sans-serif`;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.textAlign = 'center';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 莊家區 (Dealer) - 向上移動</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dealerScore = calculateScore(dealerHand, gameStatus !== 'end');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dealerScoreText = gameStatus !== 'end' ? '??' : dealerScore;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillText(`莊家 (Dealer): ${dealerScoreText} 點`, cw / 2, ch * 0.08);<span class="Apple-converted-space"> </span></p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 玩家區 (Player) - 向下移動</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const playerScore = calculateScore(playerHand, false);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>ctx.fillText(`玩家 (Player): ${playerScore} 點`, cw / 2, ch * 0.95); // 移到更底部</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 3. 繪製莊家的牌</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 調整起始 X 座標，使牌組居中</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const dealerStart_x = cw / 2 - ((dealerHand.length * cardW) + (dealerHand.length - 1) * padding) / 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>dealerHand.forEach((card, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>const isHidden = (i === 0 &amp;&amp; gameStatus !== 'end');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>drawCard(</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>card,<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>dealerStart_x + i * (cardW + padding),<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ch * 0.13, // 稍微向上移動</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cardW,<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cardH,<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>isHidden</p>
+<p class="p1"><span class="Apple-converted-space">                </span>);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 4. 繪製玩家的牌</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 調整起始 X 座標，使牌組居中</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const playerStart_x = cw / 2 - ((playerHand.length * cardW) + (playerHand.length - 1) * padding) / 2;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>playerHand.forEach((card, i) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>drawCard(</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>card,<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>playerStart_x + i * (cardW + padding),<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ch * 0.54, // 向上移動，為更大的卡片和底部分數騰出空間</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cardW,<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>cardH,<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>false</p>
+<p class="p1"><span class="Apple-converted-space">                </span>);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 5. 繪製遊戲狀態訊息</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (finalMessage) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 灰色背景 (高度縮小，防止與卡片過度重疊)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 調整黑框位置：從 ch * 0.38 開始，高度為 ch * 0.24</p>
+<p class="p1"><span class="Apple-converted-space">                </span>roundRect(cw * 0.1, ch * 0.38, cw * 0.8, ch * 0.24, 10);<span class="Apple-converted-space"> </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fill();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 訊息文字 (垂直居中在黑框內)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fillStyle = '#FFF';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.font = `${cw * 0.05}px 'Noto Sans TC', sans-serif`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 垂直位置 = 框起始位置 + 框高度/2 (即 ch * 0.38 + ch * 0.12)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>ctx.fillText(finalMessage, cw / 2, ch * 0.50);<span class="Apple-converted-space"> </span></p>
+<p class="p2"><span class="Apple-converted-space">                </span></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 動態顯示「再來一局」圖片按鈕 (取代控制區)</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 寬度統一為 w-1/3</p>
+<p class="p1"><span class="Apple-converted-space">                </span>controlsDiv.innerHTML = `&lt;button id="newGameBtn" class="control-btn w-1/3"&gt;${getButtonHtml('NEW_BTN', '再來一局 (New Game)')}&lt;/button&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('newGameBtn').onclick = startGame;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (gameStatus === 'initial') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 初始/等待狀態：繪製歡迎圖片</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (images['WELCOME']) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.drawImage(images['WELCOME'], 0, 0, cw, ch);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>} else {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 如果圖片載入失敗，則回退到文字顯示</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>roundRect(cw * 0.1, ch * 0.35, cw * 0.8, ch * 0.3, 10);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fill();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fillStyle = 'white';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.font = `${cw * 0.06}px 'Noto Sans TC', sans-serif`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.textAlign = 'center';</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fillText('準備開始遊戲', cw / 2, ch * 0.45);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.font = `${cw * 0.04}px 'Noto Sans TC', sans-serif`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>ctx.fillText('點擊下方按鈕進行發牌', cw / 2, ch * 0.55);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 初始狀態下，控制按鈕應該只有 Start/New Game - 使用圖片按鈕</p>
+<p class="p1"><span class="Apple-converted-space">                </span>// 寬度統一為 w-1/3</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>controlsDiv.innerHTML = `&lt;button id="newGameBtn" class="control-btn w-1/3"&gt;${getButtonHtml('NEW_BTN', '開始遊戲 (Start Game)')}&lt;/button&gt;`;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('newGameBtn').onclick = startGame;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>} else if (gameStatus === 'playerTurn') {</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>// 確保控制按鈕為 Hit/Stand - 使用圖片按鈕</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>if (!document.getElementById('hitBtn') || !document.getElementById('standBtn')) {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>controlsDiv.innerHTML = `</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="hitBtn" class="control-btn w-1/3"&gt;${getButtonHtml('HIT_BTN', '要牌 (Hit)')}&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>&lt;button id="standBtn" class="control-btn w-1/3"&gt;${getButtonHtml('STAND_BTN', '停牌 (Stand)')}&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>`;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('hitBtn').onclick = hit;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>document.getElementById('standBtn').onclick = stand;</p>
+<p class="p1"><span class="Apple-converted-space">                 </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// --- 6. 事件監聽器 ---</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 頁面加載完成後初始化</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.onload = function() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>loadImages();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>// 在 Canvas 容器上監聽點擊事件，如果遊戲結束，點擊畫布中央的按鈕</p>
+<p class="p1"><span class="Apple-converted-space">            </span>canvas.addEventListener('click', (event) =&gt; {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (gameStatus === 'end' || gameStatus === 'initial') {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>// 模擬點擊中央的 New Game 按鈕</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>const newGameBtn = document.getElementById('newGameBtn');</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>if (newGameBtn) {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>newGameBtn.click();</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p1"><span class="Apple-converted-space">        </span>};</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// RWD 處理：視窗大小改變時重設 Canvas 尺寸</p>
+<p class="p1"><span class="Apple-converted-space">        </span>window.addEventListener('resize', resizeCanvas);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>// 初始設定控制按鈕事件 (這些會在 loadImages 結束後被覆蓋，但為了防止初期錯誤而保留)</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('hitBtn').onclick = hit;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('standBtn').onclick = stand;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('resetStatsBtn').onclick = resetStats;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
